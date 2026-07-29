@@ -1,65 +1,132 @@
-import Image from "next/image";
+import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import {
+  GitBranch,
+  Sparkles,
+  CheckSquare,
+  CalendarClock,
+  Users,
+  ArrowRight,
+} from "lucide-react";
 
-export default function Home() {
+export default async function Landing() {
+  // Signed-in users skip the landing page and go straight to the app.
+  const { userId } = await auth();
+  if (userId) redirect("/projects");
+
+  const features = [
+    {
+      icon: Sparkles,
+      title: "AI work trails",
+      desc: "Save your AI conversations and link them to the exact task they moved forward.",
+    },
+    {
+      icon: CheckSquare,
+      title: "Tasks that tell a story",
+      desc: "A kanban board where every finished task carries the trail of how it got done.",
+    },
+    {
+      icon: CalendarClock,
+      title: "See the whole timeline",
+      desc: "Due dates on a calendar, urgent work surfaced, nothing slipping through.",
+    },
+    {
+      icon: Users,
+      title: "Built for teams",
+      desc: "Members, documents, and comments — the shared context in one place.",
+    },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      {/* Nav */}
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <div className="flex items-center gap-2">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white">
+            <GitBranch className="size-5" />
+          </div>
+          <span className="text-xl font-bold tracking-tight">Carian</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="flex items-center gap-2">
+          <SignInButton>
+            <button className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900">
+              Sign in
+            </button>
+          </SignInButton>
+          <SignUpButton>
+            <button className="rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-sm font-medium text-white hover:from-indigo-700 hover:to-purple-700">
+              Get started
+            </button>
+          </SignUpButton>
         </div>
-      </main>
-    </div>
+      </header>
+
+      {/* Hero */}
+      <section className="mx-auto max-w-4xl px-6 py-20 text-center">
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border bg-white px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
+          <Sparkles className="size-3.5 text-indigo-500" />
+          Track the work — and the AI behind it
+        </div>
+        <h1 className="text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
+          Every task keeps a{" "}
+          <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            trail
+          </span>{" "}
+          of how it got done.
+        </h1>
+        <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
+          Carian captures your AI conversations and links them to real work — so
+          the story behind every finished task is never lost.
+        </p>
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <SignUpButton>
+            <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 font-medium text-white shadow-sm hover:from-indigo-700 hover:to-purple-700">
+              Start for free
+              <ArrowRight className="size-4" />
+            </button>
+          </SignUpButton>
+          <SignInButton>
+            <button className="rounded-xl border bg-white px-6 py-3 font-medium hover:bg-slate-50">
+              Sign in
+            </button>
+          </SignInButton>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="mx-auto max-w-5xl px-6 pb-24">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {features.map((f) => (
+            <div
+              key={f.title}
+              className="rounded-2xl border bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+            >
+              <div className="mb-3 flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 text-indigo-600">
+                <f.icon className="size-5" />
+              </div>
+              <h3 className="mb-1 font-semibold">{f.title}</h3>
+              <p className="text-sm text-muted-foreground">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 text-sm text-muted-foreground">
+          <span>© {new Date().getFullYear()} Carian</span>
+          <div className="flex gap-4">
+            <SignInButton>
+              <button className="hover:text-foreground">Sign in</button>
+            </SignInButton>
+            <SignUpButton>
+              <button className="hover:text-foreground">Get started</button>
+            </SignUpButton>
+          </div>
+        </div>
+      </footer>
+    </main>
   );
 }
